@@ -7,7 +7,7 @@ set ifs "\n"
 set scrolloff 10
 set icons
 set period 1
-set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+set hiddenfiles ".*:*.aux:*.bbl:*.bcf:*.blg:*.run.xml"
 
 # Vars that depend on environmental variables
 $lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
@@ -66,8 +66,10 @@ cmd bulkrename $vidir
 # Bindings
 map <c-f> $lf -remote "send $id select '$(fzf)'"
 map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
-map gh
-map g top
+map gh cd ~
+map gf cd ~/Documents/firedrake/
+map gt cd ~/Documents/talks/
+map gg top
 map D delete
 map C copyto
 map M moveto
