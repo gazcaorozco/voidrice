@@ -1,0 +1,3 @@
+#!/bin/bash
+
+find ~/Documents/firedrake /home/alexei2/Documents/papers /home/alexei2/Documents/talks -name '*.tex' -o -name '*.py' -not -name 'matpatch' | fzf --exit-0 --query="$1" | xargs -or vim

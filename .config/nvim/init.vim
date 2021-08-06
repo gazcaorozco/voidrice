@@ -130,7 +130,7 @@ if &diff
 endif
 
 " Function for toggling the bottom statusbar:
-let s:hidden_all = 1
+let s:hidden_all = 0
 function! ToggleHiddenAll()
     if s:hidden_all  == 0
         let s:hidden_all = 1
@@ -186,6 +186,9 @@ Plugin 'tpope/vim-commentary'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'lifepillar/vim-mucomplete'
 "Plugin 'neoclide/coc.nvim'
+
+"Status bar
+Plugin 'vim-airline/vim-airline'
 
 Plugin 'jnurmine/Zenburn'
 "Plugin 'altercation/vim-colors-solarized'

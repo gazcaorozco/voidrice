@@ -73,5 +73,23 @@ bindkey '^[[P' delete-char
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
+#My stuff ------------------------------
+## Search History
+fh() {
+	  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+}
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-.} $HOME -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+## Forgit
+source "$HOME/.local/share/forgit/forgit.plugin.zsh"
+
+#---------------------------------------
+
 # Load syntax highlighting; should be last.
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
