@@ -112,9 +112,19 @@ set noshowcmd
 "	autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
 
 " Automatically deletes all trailing whitespace and newlines at end of file on save.
-	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePre * %s/\n\+\%$//e
-	autocmd BufWritePre *.[ch] %s/\%$/\r/e
+"	autocmd BufWritePre * %s/\s\+$//e
+"	autocmd BufWritePre * %s/\n\+\%$//e
+"	autocmd BufWritePre *.[ch] %s/\%$/\r/e
+	""Alternative that leaves markdown files alone
+	function! TrimWhitespace()
+  if &filetype!='markdown'
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+  endif
+endfunction
+
+command! TrimWhitespace call TrimWhitespace()
 
 " When shortcut files are updated, renew bash and ranger configs with new material:
 	autocmd BufWritePost bm-files,bm-dirs !shortcuts
