@@ -115,6 +115,7 @@ set noshowcmd
 "	autocmd BufWritePre * %s/\s\+$//e
 "	autocmd BufWritePre * %s/\n\+\%$//e
 "	autocmd BufWritePre *.[ch] %s/\%$/\r/e
+" autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 	""Alternative that leaves markdown files alone
 	function! TrimWhitespace()
   if &filetype!='markdown'
