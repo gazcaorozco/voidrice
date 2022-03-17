@@ -50,4 +50,5 @@ alias \
 	weath="less -S ${XDG_DATA_HOME:-$HOME/.local/share}/weatherreport" \
 
 #For my programs...
-alias gmsh="~/Downloads/Software/gmsh-4.8.2-Linux64/bin/gmsh"
+#alias gmsh="~/Downloads/Software/gmsh-4.8.2-Linux64/bin/gmsh"
+alias paraview="~/Downloads/software/ParaView-5.10.0-MPI-Linux-Python3.9-x86_64/bin/paraview"

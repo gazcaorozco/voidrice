@@ -1,23 +1,36 @@
 let mapleader =","
 
-"if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
-"	echo "Downloading junegunn/vim-plug to manage plugins..."
-"	silent !mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/
-"	silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim
-"	autocmd VimEnter * PlugInstall
-"endif
-"
-"call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
-"Plug 'tpope/vim-surround'
-"Plug 'preservim/nerdtree'
-"Plug 'junegunn/goyo.vim'
-"Plug 'jreybert/vimagit'
-"Plug 'lukesmithxyz/vimling'
-"Plug 'vimwiki/vimwiki'
-"Plug 'bling/vim-airline'
-"Plug 'tpope/vim-commentary'
-"Plug 'ap/vim-css-color'
-"call plug#end()
+if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
+	echo "Downloading junegunn/vim-plug to manage plugins..."
+	silent !mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/
+	silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim
+	autocmd VimEnter * PlugInstall
+endif
+
+call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
+Plug 'tpope/vim-surround'
+""Plug 'preservim/nerdtree'
+Plug 'junegunn/goyo.vim'
+""Plug 'jreybert/vimagit'
+""Plug 'lukesmithxyz/vimling'
+Plug 'vimwiki/vimwiki'
+Plug 'bling/vim-airline'
+Plug 'tpope/vim-commentary'
+""Plug 'ap/vim-css-color'
+"Mine
+Plug 'sheerun/vim-polyglot'
+"Plugin 'lifepillar/vim-mucomplete'
+"Plugin 'neoclide/coc.nvim'
+
+Plug 'jnurmine/Zenburn'
+"Plugin 'altercation/vim-colors-solarized'
+Plug 'lervag/vimtex'
+
+Plug 'vim-airline/vim-airline'
+Plug 'wincent/terminus'
+"Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
 
 set title
 set bg=light
@@ -44,7 +57,7 @@ set noshowcmd
 " Perform dot commands over visual blocks:
 	vnoremap . :normal .<CR>
 " Goyo plugin makes text more readable when writing prose:
-"	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
+	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
 " Spell-check set to <leader>o, 'o' for 'orthography':
 	map <leader>o :setlocal spell! spelllang=en_gb<CR>
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
@@ -115,17 +128,6 @@ set noshowcmd
 "	autocmd BufWritePre * %s/\s\+$//e
 "	autocmd BufWritePre * %s/\n\+\%$//e
 "	autocmd BufWritePre *.[ch] %s/\%$/\r/e
-" autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
-	""Alternative that leaves markdown files alone
-	function! TrimWhitespace()
-  if &filetype!='markdown'
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-  endif
-endfunction
-
-command! TrimWhitespace call TrimWhitespace()
 
 " When shortcut files are updated, renew bash and ranger configs with new material:
 	autocmd BufWritePost bm-files,bm-dirs !shortcuts
@@ -159,57 +161,98 @@ function! ToggleHiddenAll()
 endfunction
 nnoremap <leader>h :call ToggleHiddenAll()<CR>
 
+" CocVim Settings
+let g:airline#extensions#coc#enabled = 0
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 "My old vimrc
-set nocompatible              " be iMproved, required
-filetype off                  " required
+"set nocompatible              " be iMproved, required
+"filetype off                  " required
 
-" If vim is old, you have to 'echo "runtime vimrc" > .vimrc' in ~
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-"Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-"Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-"Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-Plugin 'vimwiki/vimwiki'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-commentary'
-
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'lifepillar/vim-mucomplete'
-"Plugin 'neoclide/coc.nvim'
-
-"Status bar
-Plugin 'vim-airline/vim-airline'
-
-Plugin 'jnurmine/Zenburn'
-"Plugin 'altercation/vim-colors-solarized'
-" A Vim Plugin for Lively Previewing LaTeX PDF Output
-"Plugin 'xuhdev/vim-latex-live-preview'
-"Vimtex
-Plugin 'lervag/vimtex'
-"All your plugins must come before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+"" If vim is old, you have to 'echo "runtime vimrc" > .vimrc' in ~
+"" set the runtime path to include Vundle and initialize
+"set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
+"" alternatively, pass a path where Vundle should install plugins
+""call vundle#begin('~/some/path/here')
+"
+"" let Vundle manage Vundle, required
+"Plugin 'VundleVim/Vundle.vim'
+"
+"" The following are examples of different formats supported.
+"" Keep Plugin commands between vundle#begin/end.
+"" plugin on GitHub repo
+""Plugin 'tpope/vim-fugitive'
+"" plugin from http://vim-scripts.org/vim/scripts.html
+"" Plugin 'L9'
+"" Git plugin not hosted on GitHub
+""Plugin 'git://git.wincent.com/command-t.git'
+"" git repos on your local machine (i.e. when working on your own plugin)
+""Plugin 'file:///home/gmarik/path/to/plugin'
+"" The sparkup vim script is in a subdirectory of this repo called vim.
+"" Pass the path to set the runtimepath properly.
+""Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+"" Install L9 and avoid a Naming conflict if you've already installed a
+"" different version somewhere else.
+"" Plugin 'ascenator/L9', {'name': 'newL9'}
+"Plugin 'vimwiki/vimwiki'
+"Plugin 'tpope/vim-surround'
+"Plugin 'tpope/vim-commentary'
+"
+""Plugin 'Valloric/YouCompleteMe'
+"Plugin 'sheerun/vim-polyglot'
+""Plugin 'lifepillar/vim-mucomplete'
+""Plugin 'neoclide/coc.nvim'
+"
+"Plugin 'jnurmine/Zenburn'
+""Plugin 'altercation/vim-colors-solarized'
+"" A Vim Plugin for Lively Previewing LaTeX PDF Output
+""Plugin 'xuhdev/vim-latex-live-preview'
+""Vimtex
+"Plugin 'lervag/vimtex'
+"
+"Plugin 'vim-airline/vim-airline'
+"Plugin 'wincent/terminus'
+""All your plugins must come before the following line
+"call vundle#end()            " required
+"filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -221,18 +264,18 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-" For mucomplete
-"set completeopt+=menuone
-"set completeopt+=noselect
-"set shortmess+=c "Shut off completion messages
-"set belloff+=ctrlg "If Vim beeps during completion
+"" For mucomplete
+""set completeopt+=menuone
+""set completeopt+=noselect
+""set shortmess+=c "Shut off completion messages
+""set belloff+=ctrlg "If Vim beeps during completion
+""let g:mucomplete#enable_auto_at_startup = 1
+""let g:mucomplete#completion_delay = 1
+""Another example
+"set completeopt-=preview
+"set completeopt+=longest,menuone,noinsert
+"let g:jedi#popup_on_dot = 0  " It may be 1 as well
 "let g:mucomplete#enable_auto_at_startup = 1
-"let g:mucomplete#completion_delay = 1
-"Another example
-set completeopt-=preview
-set completeopt+=longest,menuone,noinsert
-let g:jedi#popup_on_dot = 0  " It may be 1 as well
-let g:mucomplete#enable_auto_at_startup = 1
 
 "syntax on
 "if has('gui_running')
@@ -241,34 +284,83 @@ let g:mucomplete#enable_auto_at_startup = 1
 "    else
 "	      colorscheme zenburn
 "      endif
-      "split navigations
-      nnoremap <C-J> <C-W><C-J>
-      nnoremap <C-K> <C-W><C-K>
-      nnoremap <C-L> <C-W><C-L>
-      nnoremap <C-H> <C-W><C-H>
-      let g:tex_flavor = "latex"
-      "check spelling
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+let g:tex_flavor = "latex"
+"check spelling
 "      set spell spelllang=en_gb
-      set number
-      set relativenumber
-      "for tab completion
+set number
+set relativenumber
+
+"for tab completion
 "      set path+=**
 "      set wildmenu
 "      set wildignore+=**/node_modules/**
 "      set wildmode=longest:list,full
-      "For switching between buffers
-      nnoremap <C-n> :bnext<CR>
-      nnoremap <C-p> :bprevious<CR>
-      "Folding
-      nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-      vnoremap <Space> zf
 
-			set ignorecase
-			set smartcase
+"For switching between buffers
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprevious<CR>
 
-      "Highlights searches
-      set hlsearch
-      hi Search guibg=DarkMagenta
-      hi Search guifg=LightYellow
-      hi Search ctermbg=DarkMagenta
-      hi Search ctermfg=LightYellow
+"Folding
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
+
+set ignorecase
+set smartcase
+
+"Highlights searches
+set hlsearch
+hi Search guibg=DarkMagenta
+hi Search guifg=LightYellow
+hi Search ctermbg=DarkMagenta
+hi Search ctermfg=LightYellow
+
+"Linting
+"let g:ale_linters = {
+"      \ 'python': ['flake8', 'pyls']
+"      \}
+"let g:ale_virtualenv_dir_names = []
+"let g:python3_host_prog = '/home/alexei2/Downloads/software/firedrake/bin/python'
+
+let g:airline#extensions#ale#enabled = 1
+
+" Use lf to select and open file(s) in vim (adapted from ranger).
+"
+" You need to either copy the content of this file to your ~/.vimrc or source
+" this file directly:
+"
+"     let lfvim = "/path/to/lf.vim"
+"     if filereadable(lfvim)
+"         exec "source " . lfvim
+"     endif
+"
+" You may also like to assign a key to this command:
+"
+"     nnoremap <leader>l :LF<cr>
+"
+function! LF()
+	let temp = tempname()
+	exec 'silent !lf -selection-path=' . shellescape(temp)
+	if !filereadable(temp)
+		redraw!
+		return
+	endif
+	let names = readfile(temp)
+	if empty(names)
+		redraw!
+		return
+	endif
+	exec 'edit ' . fnameescape(names[0])
+	for name in names[1:]
+		exec 'argadd ' . fnameescape(name)
+	endfor
+	redraw!
+endfunction
+command! -bar LF call LF()
+
+nnoremap <leader>l :LF<cr>

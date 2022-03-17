@@ -13,6 +13,7 @@ application/rss+xml=rss.desktop
 video/x-matroska=video.desktop
 x-scheme-handler/lbry=lbry.desktop
 inode/directory=file.desktop
+x-scheme-handler/msteams=teams.desktop
 
 [Added Associations]
 text/x-tex=vim.desktop;
