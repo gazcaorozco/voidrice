@@ -2,7 +2,7 @@
 text/x-shellscript=text.desktop;
 x-scheme-handler/magnet=torrent.desktop;
 application/x-bittorrent=torrent.desktop;
-x-scheme-handler/mailto=mail.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-ZSQLT1.desktop
 text/plain=text.desktop;
 application/postscript=pdf.desktop;
 application/pdf=pdf.desktop;
@@ -14,6 +14,10 @@ video/x-matroska=video.desktop
 x-scheme-handler/lbry=lbry.desktop
 inode/directory=file.desktop
 x-scheme-handler/msteams=teams.desktop
+message/rfc822=userapp-Thunderbird-ZSQLT1.desktop
+x-scheme-handler/mid=userapp-Thunderbird-ZSQLT1.desktop
 
 [Added Associations]
 text/x-tex=vim.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-ZSQLT1.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-ZSQLT1.desktop;
