@@ -22,8 +22,10 @@ Plug 'sheerun/vim-polyglot'
 "Plugin 'lifepillar/vim-mucomplete'
 "Plugin 'neoclide/coc.nvim'
 
-Plug 'jnurmine/Zenburn'
+"Plug 'navarasu/onedark.nvim'
+"Plug 'jnurmine/Zenburn'
 "Plugin 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 Plug 'lervag/vimtex'
 
 Plug 'vim-airline/vim-airline'
@@ -33,7 +35,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 set title
-set bg=light
+"set bg=light
+autocmd vimenter * ++nested colorscheme gruvbox
+let g:gruvbox_transparent_bg = '1'
+let g:airline_powerline_fonts = '1'
+let g:gruvbox_contrast_dark = 'hard'
+autocmd VimEnter * hi Normal ctermbg=none
 set go=a
 set mouse=a
 "set nohlsearch

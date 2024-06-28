@@ -89,6 +89,10 @@ fd() {
 ## Forgit
 source "$HOME/.local/share/forgit/forgit.plugin.zsh"
 
+## Pyenv
+export PYENV_ROOT="$HOME/.local/src/pyenv"
+eval "$(pyenv init -)"
+
 #---------------------------------------
 
 # Load syntax highlighting; should be last.
