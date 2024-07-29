@@ -81,7 +81,10 @@ fh() {
 # fd - cd to selected directory
 fd() {
   local dir
-  dir=$(find ${1:-.} $HOME/Documents -path '*/\.*' -prune \
+#  dir=$(find ${1:-.} $HOME/Documents -path '*/\.*' -prune \
+dir=$(find ${1:-.} $HOME/Documents \
+    \( -path '*/\.*' -prune \) \
+    -o \( -path '*/Downloads/*' -prune \) \
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
